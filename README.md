@@ -1,42 +1,54 @@
-﻿# EventHub
+# EventHub
 
-Advanced event management platform built with ASP.NET Core MVC, Entity Framework Core, Identity authentication and role-based authorization.
-
-## Features
-
-- Authentication with ASP.NET Identity
-- Role-based access control: Admin, Organizer, User
-- Event creation, editing and deletion
-- Category management
-- Ticket reservation with capacity checks
-- Admin dashboard metrics: users, events, active events, registrations, revenue
-- Search and filtering by title, location, category and price
-- Responsive Bootstrap UI
-- Local image upload for event covers
-- Repository Pattern, Unit of Work, DTOs and service layer
+EventHub is a portfolio-ready event management platform built with ASP.NET Core MVC. It supports public event discovery, authentication, role-based dashboards, ticket reservation, and a personal ticket calendar backed by a real database.
 
 ## Screenshots
 
-### Home page
+### Home
 
 ![EventHub home page](docs/screenshots/eventhub-home.png)
 
-### Events page
+### Events
 
 ![EventHub events page](docs/screenshots/eventhub-events.png)
 
+### Login
+
+![EventHub login page](docs/screenshots/eventhub-login.png)
+
+### Register
+
+![EventHub register page](docs/screenshots/eventhub-register.png)
+
+## Features
+
+- User registration, login and logout with ASP.NET Identity
+- Role-based access control for Admin, Organizer and User
+- Public event listing with search and filters
+- Event details page with ticket reservation
+- User ticket calendar that shows purchased tickets by event date
+- Organizer event management panel
+- Admin dashboard with statistics and event insights
+- Category management
+- Local image upload support for event covers
+- Seeded demo users, categories and events
+- Responsive Eventopia-inspired UI design
+
 ## Tech Stack
 
-- .NET 10 / ASP.NET Core MVC
+- ASP.NET Core MVC / .NET 10
 - Entity Framework Core
+- SQLite database by default
 - SQL Server-ready configuration
-- SQLite local fallback for easy demo runs
-- ASP.NET Core Identity
-- Bootstrap, HTML, CSS, JavaScript
+- ASP.NET Identity
+- LINQ
+- Repository Pattern and Unit of Work
+- DTOs, ViewModels and Services
+- Bootstrap, HTML, CSS and JavaScript
 
 ## Demo Accounts
 
-All seeded accounts use this password:
+All demo accounts use the same password:
 
 ```text
 EventHub123!
@@ -56,17 +68,29 @@ dotnet build EventHub.slnx
 dotnet run --project EventHub.Web/EventHub.Web.csproj --no-launch-profile --urls http://localhost:5088
 ```
 
-Open:
+Open the app:
 
 ```text
 http://localhost:5088
 ```
 
-## Database Provider
+You can also run the helper script on Windows:
 
-The project runs with SQLite by default so it works immediately on machines without SQL Server LocalDB.
+```powershell
+.\run-eventhub.ps1
+```
 
-To use SQL Server, update `EventHub.Web/appsettings.json`:
+## Database
+
+The project uses a real SQLite database by default:
+
+```text
+EventHub.Web/eventhub.db
+```
+
+The application stores users, roles, events, categories, registrations and ticket reservations in the database. `appsettings.json` only stores configuration, not application data.
+
+To switch to SQL Server, update `EventHub.Web/appsettings.json`:
 
 ```json
 {
@@ -80,17 +104,19 @@ Then set `DefaultConnection` to your SQL Server connection string.
 
 ```text
 EventHub.Web
-в”њв”Ђв”Ђ Areas/Admin
-в”њв”Ђв”Ђ Constants
-в”њв”Ђв”Ђ Controllers
-в”њв”Ђв”Ђ Data
-в”њв”Ђв”Ђ DTOs
-в”њв”Ђв”Ђ Interfaces
-в”њв”Ђв”Ђ Models
-в”њв”Ђв”Ђ Repositories
-в”њв”Ђв”Ђ Services
-в”њв”Ђв”Ђ ViewModels
-в”њв”Ђв”Ђ Views
-в””в”Ђв”Ђ wwwroot
+├── Areas/Admin
+├── Controllers
+├── Data
+├── DTOs
+├── Interfaces
+├── Models
+├── Repositories
+├── Services
+├── ViewModels
+├── Views
+└── wwwroot
 ```
 
+## Project Summary
+
+EventHub demonstrates a clean MVC architecture with authentication, authorization, event management, ticket reservation, dashboard analytics and a database-backed calendar experience.
