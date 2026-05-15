@@ -1,39 +1,89 @@
 @model EventHub.Web.ViewModels.DashboardViewModel
 @{
     ViewData["Title"] = "Admin Dashboard";
+    ViewData["Breadcrumb"] = "Dashboard";
 }
 
-<section class="admin-layout">
-    <aside class="admin-sidebar">
-        <strong>EventHub Admin</strong>
-        <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
-        <a asp-area="Admin" asp-controller="Categories" asp-action="Index">Categories</a>
-        <a asp-area="" asp-controller="Organizer" asp-action="Index">Events</a>
-    </aside>
-    <div class="admin-content">
-        <h1 class="fw-bold mb-4">Dashboard</h1>
-        <div class="metric-grid dashboard-metrics mb-4">
-            <div><strong>@Model.TotalUsers</strong><span>Total users</span></div>
-            <div><strong>@Model.TotalEvents</strong><span>Total events</span></div>
-            <div><strong>@Model.ActiveEvents</strong><span>Active events</span></div>
-            <div><strong>$@Model.Revenue</strong><span>Revenue</span></div>
+<section class="eventopia-grid">
+    <div class="dashboard-stat">
+        <span>Total Events</span>
+        <strong>@Model.TotalEvents</strong>
+        <small>@Model.ActiveEvents active events</small>
+    </div>
+    <div class="dashboard-stat">
+        <span>Tickets Sold</span>
+        <strong>@Model.Registrations</strong>
+        <small>All reservations</small>
+    </div>
+    <div class="dashboard-stat">
+        <span>Total Users</span>
+        <strong>@Model.TotalUsers</strong>
+        <small>Registered accounts</small>
+    </div>
+    <div class="dashboard-panel revenue-panel">
+        <div class="panel-title">
+            <h2>Revenue Breakdown</h2>
+            <span>$@Model.Revenue total</span>
         </div>
-        <div class="admin-table">
-            <table class="table align-middle">
-                <thead><tr><th>Event</th><th>Category</th><th>Date</th><th>Tickets</th><th>Revenue</th></tr></thead>
-                <tbody>
-                @foreach (var item in Model.LatestEvents)
-                {
-                    <tr>
-                        <td class="fw-semibold">@item.Title</td>
-                        <td>@item.Category</td>
-                        <td>@item.EventDate.ToString("MMM dd, yyyy")</td>
-                        <td>@item.Tickets</td>
-                        <td>$@item.Revenue</td>
-                    </tr>
-                }
-                </tbody>
-            </table>
+        <div class="bar-chart">
+            <span style="height: 44%"></span>
+            <span style="height: 76%"></span>
+            <span style="height: 92%"></span>
+            <span style="height: 82%"></span>
+            <span style="height: 48%"></span>
+            <span style="height: 56%"></span>
+            <span style="height: 68%"></span>
+            <span style="height: 96%"></span>
+            <span style="height: 84%"></span>
+            <span style="height: 74%"></span>
+            <span style="height: 50%"></span>
+            <span style="height: 62%"></span>
+        </div>
+    </div>
+    <div class="dashboard-panel ticket-panel">
+        <div class="panel-title">
+            <h2>Ticket Summary</h2>
+            <span>Live stats</span>
+        </div>
+        <div class="donut-wrap">
+            <div class="donut-ring"><strong>@Model.Registrations</strong><span>Tickets</span></div>
+            <ul>
+                <li><span></span> Active events</li>
+                <li><span></span> Users</li>
+                <li><span></span> Revenue</li>
+            </ul>
+        </div>
+    </div>
+    <div class="dashboard-panel upcoming-panel">
+        <div class="panel-title">
+            <h2>Upcoming Events</h2>
+            <a asp-area="" asp-controller="Organizer" asp-action="Index">More</a>
+        </div>
+        <div class="mini-events">
+            @foreach (var item in Model.LatestEvents.Take(3))
+            {
+                <article>
+                    <strong>@item.Title</strong>
+                    <span>@item.Category • @item.EventDate.ToString("MMM dd, yyyy")</span>
+                    <div class="progress-line"><i style="width:@Math.Min(100, item.Tickets + 20)%"></i></div>
+                </article>
+            }
+        </div>
+    </div>
+    <div class="dashboard-panel calendar-panel">
+        <div class="panel-title">
+            <h2>@DateTime.Today.ToString("MMMM dd, yyyy")</h2>
+            <span>Today</span>
+        </div>
+        <div class="calendar-grid">
+            @foreach (var day in new[] { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" })
+            {
+                <strong>@day</strong>
+            }
+            @for (var i = 1; i <= 35; i++)
+            {
+                <span class="@(i == DateTime.Today.Day ? "active" : "")">@i</span>
+            }
         </div>
     </div>
 </section>

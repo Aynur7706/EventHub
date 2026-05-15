@@ -1,9 +1,10 @@
 @model EventHub.Web.ViewModels.EventFormViewModel
 @{
     ViewData["Title"] = "Edit Event";
+    ViewData["Breadcrumb"] = "Dashboard / Events / Edit";
+    Layout = "/Views/Shared/_DashboardLayout.cshtml";
 }
 
-<section class="container py-5">
-    <h1 class="fw-bold mb-4">Edit event</h1>
+<section class="dashboard-section">
     <partial name="_EventForm" model="Model" />
 </section>

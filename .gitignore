@@ -13,3 +13,4 @@ EventHub.Web/wwwroot/uploads/
 eventhub.pid
 eventhub-run.log
 eventhub-run.err.log
+verify-build/

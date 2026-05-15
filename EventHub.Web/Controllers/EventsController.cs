@@ -44,9 +44,15 @@ public class EventsController(IEventService eventService, ApplicationDbContext c
             return Challenge();
         }
 
-        TempData["Status"] = await eventService.RegisterAsync(id, userId, ticketCount)
-            ? "Registration completed successfully."
+        var registered = await eventService.RegisterAsync(id, userId, ticketCount);
+        TempData["Status"] = registered
+            ? "Registration completed successfully. Your ticket is now visible in your calendar."
             : "Registration could not be completed. Please check availability.";
+
+        if (registered)
+        {
+            return RedirectToAction("Calendar", "Tickets");
+        }
 
         return RedirectToAction(nameof(Details), new { id });
     }

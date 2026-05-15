@@ -1,0 +1,97 @@
+@model EventHub.Web.ViewModels.TicketCalendarViewModel
+@{
+    ViewData["Title"] = "My Tickets";
+    var previousMonth = Model.CurrentMonth.AddMonths(-1);
+    var nextMonth = Model.CurrentMonth.AddMonths(1);
+}
+
+<section class="public-page-shell">
+    <div class="container">
+        <div class="public-page-title">
+            <div>
+                <span class="eyebrow">Calendar</span>
+                <h1>My Tickets</h1>
+                <p>Your reserved events appear on the exact event dates.</p>
+            </div>
+            <span class="page-count">@Model.UpcomingEvents.Count upcoming</span>
+        </div>
+    </div>
+</section>
+
+<section class="container public-section">
+    @if (TempData["Status"] is not null)
+    {
+        <div class="alert alert-info">@TempData["Status"]</div>
+    }
+
+    <div class="ticket-calendar-shell">
+        <div class="ticket-calendar-panel">
+            <div class="ticket-calendar-header">
+                <div>
+                    <span>@Model.CurrentMonth.ToString("MMMM yyyy")</span>
+                    <strong>Event Calendar</strong>
+                </div>
+                <div class="calendar-actions">
+                    <a asp-action="Calendar" asp-route-month="@previousMonth.Month" asp-route-year="@previousMonth.Year">&lt;</a>
+                    <a asp-action="Calendar" asp-route-month="@nextMonth.Month" asp-route-year="@nextMonth.Year">&gt;</a>
+                </div>
+            </div>
+
+            <div class="ticket-calendar-grid">
+                @foreach (var dayName in new[] { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" })
+                {
+                    <strong>@dayName</strong>
+                }
+                @foreach (var day in Model.Days)
+                {
+                    <div class="ticket-day @(day.IsCurrentMonth ? "" : "muted") @(day.IsToday ? "today" : "") @(day.Events.Any() ? "has-event" : "")">
+                        <span>@day.Date.Day</span>
+                        @foreach (var item in day.Events.Take(2))
+                        {
+                            <a asp-controller="Events" asp-action="Details" asp-route-id="@item.EventId">@item.Title</a>
+                        }
+                        @if (day.Events.Count > 2)
+                        {
+                            <small>+@(day.Events.Count - 2) more</small>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+
+        <aside class="ticket-list-panel">
+            <div class="panel-title">
+                <h2>Upcoming Tickets</h2>
+                <span>@Model.UpcomingEvents.Sum(e => e.TicketCount) tickets</span>
+            </div>
+
+            @if (!Model.UpcomingEvents.Any())
+            {
+                <div class="empty-ticket-state">
+                    <strong>No tickets yet</strong>
+                    <span>Reserve an event ticket and it will appear here automatically.</span>
+                    <a class="btn btn-dark" asp-controller="Events" asp-action="Index">Explore Events</a>
+                </div>
+            }
+            else
+            {
+                <div class="ticket-list">
+                    @foreach (var item in Model.UpcomingEvents)
+                    {
+                        <article>
+                            <div class="ticket-date">
+                                <strong>@item.EventDate.ToString("dd")</strong>
+                                <span>@item.EventDate.ToString("MMM")</span>
+                            </div>
+                            <div>
+                                <h3>@item.Title</h3>
+                                <span>@item.Category • @item.Location</span>
+                                <small>@item.EventDate.ToString("h:mm tt") • @item.TicketCount ticket(s) • $@item.TotalPrice</small>
+                            </div>
+                        </article>
+                    }
+                </div>
+            }
+        </aside>
+    </div>
+</section>

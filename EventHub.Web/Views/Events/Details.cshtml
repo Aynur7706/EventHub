@@ -3,30 +3,46 @@
     ViewData["Title"] = Model.Event.Title;
 }
 
-<section class="container py-5">
+<section class="container public-section">
     @if (TempData["Status"] is not null)
     {
         <div class="alert alert-info">@TempData["Status"]</div>
     }
-    <div class="row g-5">
-        <div class="col-lg-7">
-            <img class="detail-image" src="@Model.Event.ImageUrl" alt="@Model.Event.Title" />
+    <div class="event-detail-shell">
+        <div class="event-detail-main">
+            <div class="detail-image-wrap">
+                <img class="detail-image" src="@Model.Event.ImageUrl" alt="@Model.Event.Title" />
+                <span class="category-pill">@Model.Event.CategoryName</span>
+                <span class="status-pill">Active</span>
+            </div>
+            <div class="detail-content-card">
+                <h1>@Model.Event.Title</h1>
+                <div class="detail-meta-row">
+                    <span>@Model.Event.EventDate.ToString("h:mm tt")</span>
+                    <span>@Model.Event.EventDate.ToString("MMMM dd, yyyy")</span>
+                    <span>@Model.Event.Location</span>
+                </div>
+                <p>@Model.Event.Description</p>
+                <div class="progress-line"><i style="width:@Math.Min(100, Model.Event.RegisteredTickets * 100 / Math.Max(1, Model.Event.Capacity))%"></i></div>
+                <small>@Model.Event.RegisteredTickets/@Model.Event.Capacity tickets booked</small>
+            </div>
         </div>
-        <div class="col-lg-5">
-            <span class="badge text-bg-light">@Model.Event.CategoryName</span>
-            <h1 class="fw-bold mt-3">@Model.Event.Title</h1>
-            <p class="text-muted">@Model.Event.Description</p>
-            <dl class="detail-list">
-                <dt>Date</dt><dd>@Model.Event.EventDate.ToString("f")</dd>
-                <dt>Location</dt><dd>@Model.Event.Location</dd>
-                <dt>Organizer</dt><dd>@Model.Event.OrganizerName</dd>
-                <dt>Price</dt><dd>$@Model.Event.Price</dd>
-                <dt>Available</dt><dd>@Model.AvailableTickets tickets</dd>
-            </dl>
+        <aside class="event-detail-side">
+            <div class="attendee-ring-card">
+                <h2>Attendee Rate</h2>
+                <span>@Model.Event.RegisteredTickets Total Tickets Booked</span>
+                <div class="donut-ring"><strong>@(Model.Event.Capacity == 0 ? 0 : Math.Min(100, Model.Event.RegisteredTickets * 100 / Model.Event.Capacity))%</strong><span>Booked</span></div>
+            </div>
             <form asp-action="Register" asp-route-id="@Model.Event.Id" method="post" class="reservation-box">
+                <h2>Reserve Ticket</h2>
+                <dl class="detail-list">
+                    <dt>Price</dt><dd>@(Model.Event.Price == 0 ? "Free" : $"${Model.Event.Price}")</dd>
+                    <dt>Available</dt><dd>@Model.AvailableTickets tickets</dd>
+                    <dt>Organizer</dt><dd>@Model.Event.OrganizerName</dd>
+                </dl>
                 <label class="form-label" for="ticketCount">Tickets</label>
                 <input class="form-control" id="ticketCount" name="ticketCount" type="number" min="1" max="@Model.AvailableTickets" value="1" />
-                <button class="btn btn-dark w-100 mt-3" type="submit">Reserve ticket</button>
+                <button class="btn btn-dark w-100 mt-3" type="submit">Reserve Ticket</button>
             </form>
         </div>
     </div>

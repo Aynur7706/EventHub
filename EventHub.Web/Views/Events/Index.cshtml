@@ -3,14 +3,19 @@
     ViewData["Title"] = "Events";
 }
 
-<section class="page-heading">
+<section class="public-page-shell">
     <div class="container">
-        <span class="eyebrow">Discover</span>
-        <h1 class="fw-bold mt-2">Upcoming events</h1>
+        <div class="public-page-title">
+            <div>
+                <span class="eyebrow">Discover</span>
+                <h1>Upcoming Events</h1>
+            </div>
+            <span class="page-count">@Model.Events.Count events</span>
+        </div>
     </div>
 </section>
 
-<section class="container py-4">
+<section class="container public-section">
     <form class="filter-bar" method="get">
         <input class="form-control" asp-for="Filter.Search" name="Search" placeholder="Search events" />
         <input class="form-control" asp-for="Filter.Location" name="Location" placeholder="City or venue" />
@@ -25,12 +30,10 @@
         <button class="btn btn-dark" type="submit">Filter</button>
     </form>
 
-    <div class="row g-4 mt-2">
+    <div class="public-card-grid mt-4">
         @foreach (var item in Model.Events)
         {
-            <div class="col-md-6 col-xl-4">
-                <partial name="_EventCard" model="item" />
-            </div>
+            <partial name="_EventCard" model="item" />
         }
     </div>
 </section>

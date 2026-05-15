@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - EventHub</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/EventHub.Web.styles.css" asp-append-version="true" />
+</head>
+<body class="dashboard-body">
+    <div class="dashboard-shell">
+        <aside class="dashboard-sidebar">
+            <a class="dashboard-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                <span></span>
+                EventHub
+            </a>
+            <div class="sidebar-label">Menu</div>
+            <nav class="dashboard-nav">
+                @if (User.IsInRole("Admin"))
+                {
+                    <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+                    <a asp-area="" asp-controller="Organizer" asp-action="Index">Events</a>
+                    <a asp-area="Admin" asp-controller="Categories" asp-action="Index">Categories</a>
+                }
+                else
+                {
+                    <a asp-area="" asp-controller="Organizer" asp-action="Index">Events</a>
+                    <a asp-area="" asp-controller="Organizer" asp-action="Create">Create Event</a>
+                }
+            </nav>
+            <div class="sidebar-label mt-auto">General</div>
+            <nav class="dashboard-nav">
+                <a asp-area="" asp-controller="Events" asp-action="Index">Public Events</a>
+                <a asp-area="" asp-controller="Home" asp-action="Contact">Help</a>
+            </nav>
+            <div class="sidebar-download">
+                <strong>Portfolio Mode</strong>
+                <span>Clean MVC, Identity and dashboard analytics.</span>
+            </div>
+        </aside>
+
+        <main class="dashboard-main">
+            <header class="dashboard-topbar">
+                <div>
+                    <span class="dashboard-breadcrumb">@ViewData["Breadcrumb"]</span>
+                    <h1>@ViewData["Title"]</h1>
+                </div>
+                <form class="dashboard-search" asp-area="" asp-controller="Events" asp-action="Index" method="get">
+                    <input name="Search" placeholder="Search events" />
+                </form>
+                <div class="dashboard-user">
+                    <div class="user-avatar">@((User.Identity?.Name ?? "EH").Substring(0, 1).ToUpper())</div>
+                    <div>
+                        <strong>@User.Identity?.Name</strong>
+                        <span>EventHub account</span>
+                    </div>
+                </div>
+            </header>
+
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
