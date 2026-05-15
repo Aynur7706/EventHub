@@ -15,6 +15,16 @@ Advanced event management platform built with ASP.NET Core MVC, Entity Framework
 - Local image upload for event covers
 - Repository Pattern, Unit of Work, DTOs and service layer
 
+## Screenshots
+
+### Home page
+
+![EventHub home page](docs/screenshots/eventhub-home.png)
+
+### Events page
+
+![EventHub events page](docs/screenshots/eventhub-events.png)
+
 ## Tech Stack
 
 - .NET 10 / ASP.NET Core MVC
