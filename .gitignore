@@ -14,5 +14,7 @@ eventhub.pid
 eventhub-run.log
 eventhub-run.err.log
 verify-build/
+verify-build-auth/
+verify-realimages/
 chrome-*-profile/
 chrome-shot-profile*/

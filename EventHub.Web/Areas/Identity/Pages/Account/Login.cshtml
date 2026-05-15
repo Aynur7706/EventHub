@@ -2,10 +2,20 @@
 @model EventHub.Web.Areas.Identity.Pages.Account.LoginModel
 @{
     ViewData["Title"] = "Login";
+    Layout = "/Views/Shared/_Layout.cshtml";
 }
 
-<section class="auth-section">
-    <div class="auth-card">
+<style>
+    .auth-polished { min-height: calc(100vh - 170px); display: grid; place-items: center; padding: 56px 16px; background: #f6f2eb; }
+    .auth-polished-card { width: min(100%, 460px); padding: 34px; background: #e9e0d4; border: 1px solid #d7cfc4; border-radius: 8px; box-shadow: 0 18px 42px rgba(31,25,17,.14); }
+    .auth-polished-card h1 { color: #050505; font-weight: 950; }
+    .auth-polished-card .form-control { min-height: 48px; border-radius: 999px; border-color: #d2c9bd; background: #fffaf3; }
+    .auth-polished-card .btn { border-radius: 999px; font-weight: 800; }
+    .auth-polished-card .remember-row, .auth-polished-card .demo-accounts { background: #fffaf3; border: 1px solid #d7cfc4; }
+</style>
+
+<section class="auth-section auth-polished">
+    <div class="auth-card auth-polished-card">
         <span class="eyebrow">Welcome back</span>
         <h1 class="h2 fw-bold mt-2">Login to EventHub</h1>
         <p class="text-muted">Admins and organizers are redirected to their workspace after login.</p>
