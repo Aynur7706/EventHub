@@ -6,15 +6,34 @@
 }
 
 <style>
-    .auth-polished { min-height: calc(100vh - 170px); display: grid; place-items: center; padding: 56px 16px; background: #f6f2eb; }
-    .auth-polished-card { width: min(100%, 460px); padding: 34px; background: #e9e0d4; border: 1px solid #d7cfc4; border-radius: 8px; box-shadow: 0 18px 42px rgba(31,25,17,.14); }
+    .auth-polished { min-height: calc(100vh - 170px); display: grid; place-items: center; padding: 54px 16px; background: #f6f2eb; }
+    .auth-split { width: min(100%, 1040px); display: grid; grid-template-columns: 1fr 460px; gap: 18px; }
+    .auth-visual { min-height: 620px; overflow: hidden; position: relative; border: 1px solid #d7cfc4; border-radius: 8px; background: #050505; box-shadow: 0 18px 42px rgba(31,25,17,.14); }
+    .auth-visual img { width: 100%; height: 100%; object-fit: cover; opacity: .78; }
+    .auth-visual-copy { position: absolute; inset: auto 28px 28px 28px; color: #fff; }
+    .auth-visual-copy h2 { max-width: 560px; font-size: clamp(2.2rem, 5vw, 4.4rem); line-height: .98; font-weight: 950; }
+    .auth-visual-copy p { max-width: 520px; color: rgba(255,255,255,.82); }
+    .auth-floating-stat { position: absolute; top: 28px; left: 28px; padding: 16px 18px; color: #050505; background: #fffaf3; border-radius: 8px; }
+    .auth-floating-stat strong { display: block; font-size: 1.8rem; line-height: 1; }
+    .auth-polished-card { width: 100%; padding: 34px; background: #e9e0d4; border: 1px solid #d7cfc4; border-radius: 8px; box-shadow: 0 18px 42px rgba(31,25,17,.14); }
     .auth-polished-card h1 { color: #050505; font-weight: 950; }
     .auth-polished-card .form-control { min-height: 48px; border-radius: 999px; border-color: #d2c9bd; background: #fffaf3; }
     .auth-polished-card .btn { border-radius: 999px; font-weight: 800; }
     .auth-polished-card .remember-row, .auth-polished-card .demo-accounts { background: #fffaf3; border: 1px solid #d7cfc4; }
+    @@media (max-width: 992px) { .auth-split { grid-template-columns: 1fr; } .auth-visual { min-height: 380px; } }
 </style>
 
 <section class="auth-section auth-polished">
+    <div class="auth-split">
+    <div class="auth-visual">
+        <img src="~/images/events/photos/tech-expo.jpg" asp-append-version="true" alt="Event audience" />
+        <div class="auth-floating-stat"><strong>12+</strong><span>Live events</span></div>
+        <div class="auth-visual-copy">
+            <h2>Welcome back to EventHub.</h2>
+            <p>Manage dashboards, reserve tickets and keep every upcoming event in your calendar.</p>
+        </div>
+    </div>
+
     <div class="auth-card auth-polished-card">
         <span class="eyebrow">Welcome back</span>
         <h1 class="h2 fw-bold mt-2">Login to EventHub</h1>
@@ -52,6 +71,7 @@
             <span>organizer@eventhub.local / EventHub123!</span>
             <span>user@eventhub.local / EventHub123!</span>
         </div>
+    </div>
     </div>
 </section>
 

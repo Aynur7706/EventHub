@@ -138,8 +138,9 @@ body {
 
 .event-card img {
   width: 100%;
-  aspect-ratio: 16 / 9;
+  height: 220px;
   object-fit: cover;
+  object-position: center;
   background: var(--soft);
 }
 
@@ -201,8 +202,9 @@ body {
   width: 100%;
   border-radius: 8px;
   border: 1px solid var(--line);
-  aspect-ratio: 16 / 10;
+  height: min(58vh, 520px);
   object-fit: cover;
+  object-position: center;
   background: var(--soft);
 }
 
@@ -787,8 +789,9 @@ body {
 
 .manage-event-image img {
   width: 100%;
-  aspect-ratio: 16 / 9;
+  height: 190px;
   object-fit: cover;
+  object-position: center;
 }
 
 .category-pill,
