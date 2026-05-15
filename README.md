@@ -1,4 +1,4 @@
-# EventHub
+﻿# EventHub
 
 Advanced event management platform built with ASP.NET Core MVC, Entity Framework Core, Identity authentication and role-based authorization.
 
@@ -80,22 +80,17 @@ Then set `DefaultConnection` to your SQL Server connection string.
 
 ```text
 EventHub.Web
-├── Areas/Admin
-├── Constants
-├── Controllers
-├── Data
-├── DTOs
-├── Interfaces
-├── Models
-├── Repositories
-├── Services
-├── ViewModels
-├── Views
-└── wwwroot
+в”њв”Ђв”Ђ Areas/Admin
+в”њв”Ђв”Ђ Constants
+в”њв”Ђв”Ђ Controllers
+в”њв”Ђв”Ђ Data
+в”њв”Ђв”Ђ DTOs
+в”њв”Ђв”Ђ Interfaces
+в”њв”Ђв”Ђ Models
+в”њв”Ђв”Ђ Repositories
+в”њв”Ђв”Ђ Services
+в”њв”Ђв”Ђ ViewModels
+в”њв”Ђв”Ђ Views
+в””в”Ђв”Ђ wwwroot
 ```
 
-## CV Description
-
-EventHub — Advanced Event Management Platform
-
-Built a full-featured event management platform using ASP.NET Core MVC, Entity Framework Core, Identity Authentication and role-based authorization. Implemented event registration, category management, admin dashboard analytics, responsive UI, filtering, image upload and clean service/repository architecture.
