@@ -1,0 +1,19 @@
+@model EventHub.Web.DTOs.EventDto
+
+<article class="event-card h-100">
+    <img src="@Model.ImageUrl" alt="@Model.Title" />
+    <div class="event-card-body">
+        <div class="d-flex justify-content-between gap-3 mb-3">
+            <span class="badge text-bg-light">@Model.CategoryName</span>
+            <span class="fw-semibold">@Model.EventDate.ToString("MMM dd")</span>
+        </div>
+        <h3 class="h5 fw-bold">@Model.Title</h3>
+        <p class="text-muted small">@Model.Description</p>
+        <div class="event-meta">
+            <span>@Model.Location</span>
+            <span>$@Model.Price</span>
+            <span>@Model.RegisteredTickets/@Model.Capacity tickets</span>
+        </div>
+        <a class="btn btn-dark w-100 mt-4" asp-controller="Events" asp-action="Details" asp-route-id="@Model.Id">View details</a>
+    </div>
+</article>

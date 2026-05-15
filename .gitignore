@@ -1,0 +1,15 @@
+bin/
+obj/
+.vs/
+.vscode/
+*.user
+*.suo
+*.db
+*.db-shm
+*.db-wal
+DataProtectionKeys/
+EventHub.Web/DataProtectionKeys/
+EventHub.Web/wwwroot/uploads/
+eventhub.pid
+eventhub-run.log
+eventhub-run.err.log

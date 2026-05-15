@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
+  <rect width="1200" height="675" fill="#f7faf9"/>
+  <rect x="120" y="120" width="960" height="435" rx="34" fill="#ffffff" stroke="#dce4e2"/>
+  <path d="M220 465c120-148 246-222 378-222s258 74 378 222" fill="none" stroke="#0f766e" stroke-width="28" stroke-linecap="round"/>
+  <circle cx="600" cy="248" r="86" fill="#111827"/>
+  <text x="180" y="585" font-family="Arial, sans-serif" font-size="50" font-weight="700" fill="#111827">Baku Startup Summit</text>
+</svg>

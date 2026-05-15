@@ -1,0 +1,50 @@
+@page
+@model EventHub.Web.Areas.Identity.Pages.Account.RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<section class="auth-section">
+    <div class="auth-card auth-card-wide">
+        <span class="eyebrow">Join EventHub</span>
+        <h1 class="h2 fw-bold mt-2">Create your account</h1>
+        <p class="text-muted">Reserve tickets, follow upcoming events and manage your registrations from one place.</p>
+
+        <form method="post" class="mt-4 auth-form">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            <input type="hidden" asp-for="ReturnUrl" />
+            <div class="row g-3">
+                <div class="col-12">
+                    <label class="form-label" asp-for="Input.FullName"></label>
+                    <input class="form-control" asp-for="Input.FullName" autocomplete="name" placeholder="Your full name" />
+                    <span class="text-danger" asp-validation-for="Input.FullName"></span>
+                </div>
+                <div class="col-12">
+                    <label class="form-label" asp-for="Input.Email"></label>
+                    <input class="form-control" asp-for="Input.Email" autocomplete="username" placeholder="name@example.com" />
+                    <span class="text-danger" asp-validation-for="Input.Email"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" asp-for="Input.Password"></label>
+                    <input class="form-control" asp-for="Input.Password" autocomplete="new-password" />
+                    <span class="text-danger" asp-validation-for="Input.Password"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" asp-for="Input.ConfirmPassword"></label>
+                    <input class="form-control" asp-for="Input.ConfirmPassword" autocomplete="new-password" />
+                    <span class="text-danger" asp-validation-for="Input.ConfirmPassword"></span>
+                </div>
+            </div>
+
+            <button class="btn btn-dark btn-lg w-100 mt-4" type="submit">Create account</button>
+            <p class="auth-switch text-muted mt-4 mb-0">
+                Already have an account?
+                <a asp-area="Identity" asp-page="/Account/Login">Login</a>
+            </p>
+        </form>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

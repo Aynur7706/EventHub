@@ -1,0 +1,49 @@
+@model IEnumerable<EventHub.Web.Models.Event>
+@{
+    ViewData["Title"] = "Organizer";
+}
+
+<section class="page-heading">
+    <div class="container d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3">
+        <div>
+            <span class="eyebrow">Management</span>
+            <h1 class="fw-bold mt-2">Organizer workspace</h1>
+        </div>
+        <a class="btn btn-dark" asp-action="Create">Create event</a>
+    </div>
+</section>
+
+<section class="container py-4">
+    <div class="table-responsive admin-table">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>Event</th>
+                    <th>Category</th>
+                    <th>Date</th>
+                    <th>Capacity</th>
+                    <th>Revenue</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="fw-semibold">@item.Title</td>
+                    <td>@item.Category?.Name</td>
+                    <td>@item.EventDate.ToString("MMM dd, yyyy")</td>
+                    <td>@item.Registrations.Sum(r => r.TicketCount)/@item.Capacity</td>
+                    <td>$@item.Registrations.Sum(r => r.TotalPrice)</td>
+                    <td class="text-end">
+                        <a class="btn btn-sm btn-outline-dark" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        <form class="d-inline" asp-action="Delete" asp-route-id="@item.Id" method="post">
+                            <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</section>

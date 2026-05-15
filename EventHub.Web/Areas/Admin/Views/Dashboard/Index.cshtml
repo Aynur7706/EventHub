@@ -1,0 +1,39 @@
+@model EventHub.Web.ViewModels.DashboardViewModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<section class="admin-layout">
+    <aside class="admin-sidebar">
+        <strong>EventHub Admin</strong>
+        <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+        <a asp-area="Admin" asp-controller="Categories" asp-action="Index">Categories</a>
+        <a asp-area="" asp-controller="Organizer" asp-action="Index">Events</a>
+    </aside>
+    <div class="admin-content">
+        <h1 class="fw-bold mb-4">Dashboard</h1>
+        <div class="metric-grid dashboard-metrics mb-4">
+            <div><strong>@Model.TotalUsers</strong><span>Total users</span></div>
+            <div><strong>@Model.TotalEvents</strong><span>Total events</span></div>
+            <div><strong>@Model.ActiveEvents</strong><span>Active events</span></div>
+            <div><strong>$@Model.Revenue</strong><span>Revenue</span></div>
+        </div>
+        <div class="admin-table">
+            <table class="table align-middle">
+                <thead><tr><th>Event</th><th>Category</th><th>Date</th><th>Tickets</th><th>Revenue</th></tr></thead>
+                <tbody>
+                @foreach (var item in Model.LatestEvents)
+                {
+                    <tr>
+                        <td class="fw-semibold">@item.Title</td>
+                        <td>@item.Category</td>
+                        <td>@item.EventDate.ToString("MMM dd, yyyy")</td>
+                        <td>@item.Tickets</td>
+                        <td>$@item.Revenue</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>

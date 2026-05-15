@@ -1,0 +1,36 @@
+@model EventHub.Web.ViewModels.EventListViewModel
+@{
+    ViewData["Title"] = "Events";
+}
+
+<section class="page-heading">
+    <div class="container">
+        <span class="eyebrow">Discover</span>
+        <h1 class="fw-bold mt-2">Upcoming events</h1>
+    </div>
+</section>
+
+<section class="container py-4">
+    <form class="filter-bar" method="get">
+        <input class="form-control" asp-for="Filter.Search" name="Search" placeholder="Search events" />
+        <input class="form-control" asp-for="Filter.Location" name="Location" placeholder="City or venue" />
+        <select class="form-select" asp-for="Filter.CategoryId" name="CategoryId">
+            <option value="">All categories</option>
+            @foreach (var category in Model.Categories)
+            {
+                <option value="@category.Id">@category.Name</option>
+            }
+        </select>
+        <input class="form-control" asp-for="Filter.MaxPrice" name="MaxPrice" placeholder="Max price" />
+        <button class="btn btn-dark" type="submit">Filter</button>
+    </form>
+
+    <div class="row g-4 mt-2">
+        @foreach (var item in Model.Events)
+        {
+            <div class="col-md-6 col-xl-4">
+                <partial name="_EventCard" model="item" />
+            </div>
+        }
+    </div>
+</section>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
+  <rect width="1200" height="675" fill="#f4f7fb"/>
+  <rect x="160" y="105" width="880" height="465" rx="28" fill="#ffffff" stroke="#d8e0eb"/>
+  <g fill="none" stroke="#2563eb" stroke-width="18">
+    <path d="M360 338h480M600 178v320M430 218l340 240M770 218 430 458"/>
+  </g>
+  <circle cx="600" cy="338" r="92" fill="#0f766e"/>
+  <text x="180" y="610" font-family="Arial, sans-serif" font-size="50" font-weight="700" fill="#111827">AI Product Workshop</text>
+</svg>
