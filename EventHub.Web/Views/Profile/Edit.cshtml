@@ -1,0 +1,41 @@
+@model EventHub.Web.ViewModels.ProfileEditViewModel
+@{
+    ViewData["Title"] = "Edit Profile";
+}
+
+<section class="public-page-shell">
+    <div class="container">
+        <div class="public-page-title">
+            <div>
+                <span class="eyebrow">Account</span>
+                <h1>Edit Profile</h1>
+                <p>Keep your account information up to date.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="container public-section">
+    <form class="contact-form profile-edit-form" asp-action="Edit" method="post">
+        <div class="row g-3">
+            <div class="col-12">
+                <label class="form-label" asp-for="FullName">Full name</label>
+                <input class="form-control" asp-for="FullName" />
+                <span class="text-danger" asp-validation-for="FullName"></span>
+            </div>
+            <div class="col-12">
+                <label class="form-label" asp-for="PhoneNumber">Phone number</label>
+                <input class="form-control" asp-for="PhoneNumber" placeholder="+994..." />
+                <span class="text-danger" asp-validation-for="PhoneNumber"></span>
+            </div>
+            <div class="col-12 d-flex gap-2">
+                <button class="btn btn-dark px-4" type="submit">Save Changes</button>
+                <a class="btn btn-light px-4" asp-action="Index">Cancel</a>
+            </div>
+        </div>
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

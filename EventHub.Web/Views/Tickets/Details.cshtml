@@ -1,0 +1,52 @@
+@model EventHub.Web.ViewModels.TicketDetailsViewModel
+@{
+    ViewData["Title"] = "Ticket Details";
+}
+
+<section class="public-page-shell">
+    <div class="container">
+        <div class="public-page-title">
+            <div>
+                <span class="eyebrow">Ticket</span>
+                <h1>@Model.EventTitle</h1>
+                <p>Use this ticket code for event check-in.</p>
+            </div>
+            <span class="page-count">@Model.TicketCount ticket(s)</span>
+        </div>
+    </div>
+</section>
+
+<section class="container public-section">
+    <div class="ticket-detail-shell">
+        <div class="ticket-detail-card">
+            <div>
+                <span class="eyebrow">@Model.Category</span>
+                <h2>@Model.EventTitle</h2>
+                <p>@Model.Location</p>
+            </div>
+            <dl class="ticket-detail-list">
+                <dt>Date</dt>
+                <dd>@Model.EventDate.ToString("MMMM dd, yyyy")</dd>
+                <dt>Time</dt>
+                <dd>@Model.EventDate.ToString("h:mm tt")</dd>
+                <dt>Customer</dt>
+                <dd>@Model.CustomerName</dd>
+                <dt>Email</dt>
+                <dd>@Model.CustomerEmail</dd>
+                <dt>Total</dt>
+                <dd>$@Model.TotalPrice</dd>
+                <dt>Status</dt>
+                <dd>@Model.Status</dd>
+                <dt>Checked In</dt>
+                <dd>@(Model.CheckedInAt?.ToString("MMMM dd, yyyy h:mm tt") ?? "Not yet")</dd>
+            </dl>
+        </div>
+
+        <aside class="ticket-qr-card">
+            <img src="@Url.Action("Qr", "Tickets", new { id = Model.RegistrationId })" alt="Ticket QR code" />
+            <strong>@Model.TicketCode</strong>
+            <span>Unique ticket verification code</span>
+            <a class="btn btn-dark w-100" asp-controller="Tickets" asp-action="Calendar">Back to Calendar</a>
+        </aside>
+    </div>
+</section>

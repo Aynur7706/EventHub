@@ -1,0 +1,50 @@
+@model EventHub.Web.ViewModels.AdminCheckInViewModel
+@{
+    ViewData["Title"] = "Ticket Check In";
+    ViewData["Breadcrumb"] = "Dashboard / Check In";
+}
+
+<section class="checkin-shell">
+    <div class="dashboard-panel checkin-panel">
+        <div class="panel-title">
+            <h2>Validate Ticket</h2>
+            <span>QR / ticket code</span>
+        </div>
+
+        <form asp-action="CheckIn" method="post" class="checkin-form">
+            <label class="form-label" asp-for="TicketCode">Ticket Code</label>
+            <input class="form-control" asp-for="TicketCode" placeholder="EH-20260516-ABC123" autofocus />
+            <button class="btn btn-dark" type="submit">Check In</button>
+        </form>
+
+        @if (!string.IsNullOrWhiteSpace(Model.Message))
+        {
+            <div class="checkin-message @(Model.IsSuccess ? "success" : "warning")">
+                <strong>@(Model.IsSuccess ? "Success" : "Check-in warning")</strong>
+                <span>@Model.Message</span>
+            </div>
+        }
+    </div>
+
+    @if (Model.Ticket is not null)
+    {
+        <aside class="dashboard-panel checkin-result">
+            <div class="panel-title">
+                <h2>@Model.Ticket.EventTitle</h2>
+                <span>@Model.Ticket.Status</span>
+            </div>
+            <dl>
+                <dt>Customer</dt>
+                <dd>@Model.Ticket.CustomerName</dd>
+                <dt>Email</dt>
+                <dd>@Model.Ticket.CustomerEmail</dd>
+                <dt>Event Date</dt>
+                <dd>@Model.Ticket.EventDate.ToString("MMM dd, yyyy h:mm tt")</dd>
+                <dt>Ticket Code</dt>
+                <dd><code>@Model.Ticket.TicketCode</code></dd>
+                <dt>Checked In</dt>
+                <dd>@(Model.Ticket.CheckedInAt?.ToString("MMM dd, yyyy h:mm tt") ?? "Not yet")</dd>
+            </dl>
+        </aside>
+    }
+</section>

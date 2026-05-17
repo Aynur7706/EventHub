@@ -64,7 +64,7 @@
             {
                 <article>
                     <strong>@item.Title</strong>
-                    <span>@item.Category • @item.EventDate.ToString("MMM dd, yyyy")</span>
+                    <span>@item.Category &bull; @item.EventDate.ToString("MMM dd, yyyy")</span>
                     <div class="progress-line"><i style="width:@Math.Min(100, item.Tickets + 20)%"></i></div>
                 </article>
             }
@@ -83,6 +83,78 @@
             @for (var i = 1; i <= 35; i++)
             {
                 <span class="@(i == DateTime.Today.Day ? "active" : "")">@i</span>
+            }
+        </div>
+    </div>
+    <div class="dashboard-panel admin-action-panel">
+        <div class="panel-title">
+            <h2>Admin Actions</h2>
+            <span>Management</span>
+        </div>
+        <div class="admin-action-grid">
+            <a asp-area="" asp-controller="Organizer" asp-action="Create">
+                <strong>Create Event</strong>
+                <span>Add a new public event</span>
+            </a>
+            <a asp-area="Admin" asp-controller="Registrations" asp-action="Index">
+                <strong>Manage Tickets</strong>
+                <span>Review all reservations</span>
+            </a>
+            <a asp-area="Admin" asp-controller="Users" asp-action="Index">
+                <strong>View Users</strong>
+                <span>Customers and organizers</span>
+            </a>
+            <a asp-area="Admin" asp-controller="Categories" asp-action="Index">
+                <strong>Categories</strong>
+                <span>Control event groups</span>
+            </a>
+        </div>
+    </div>
+    <div class="dashboard-panel activity-panel">
+        <div class="panel-title">
+            <h2>Latest Registrations</h2>
+            <a asp-area="Admin" asp-controller="Registrations" asp-action="Index">See all</a>
+        </div>
+        <div class="admin-table-wrap">
+            <table class="admin-data-table">
+                <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Event</th>
+                        <th>Tickets</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in Model.LatestRegistrations)
+                {
+                    <tr>
+                        <td>@item.Customer</td>
+                        <td>@item.EventTitle</td>
+                        <td>@item.TicketCount</td>
+                        <td>$@item.TotalPrice</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="dashboard-panel category-insight-panel">
+        <div class="panel-title">
+            <h2>Category Insights</h2>
+            <span>Demand</span>
+        </div>
+        <div class="insight-list">
+            @foreach (var item in Model.CategoryBreakdown)
+            {
+                var width = Math.Min(100, item.TicketsSold + item.EventCount * 10);
+                <article>
+                    <div>
+                        <strong>@item.Name</strong>
+                        <span>@item.EventCount events &bull; @item.TicketsSold tickets</span>
+                    </div>
+                    <div class="progress-line"><i style="width:@width%"></i></div>
+                </article>
             }
         </div>
     </div>

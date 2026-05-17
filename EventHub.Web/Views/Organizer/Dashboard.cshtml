@@ -1,0 +1,92 @@
+@model EventHub.Web.ViewModels.OrganizerDashboardViewModel
+@{
+    ViewData["Title"] = "Organizer Dashboard";
+    ViewData["Breadcrumb"] = "Organizer / Dashboard";
+    Layout = "/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<section class="eventopia-grid">
+    <div class="dashboard-stat">
+        <span>Total Events</span>
+        <strong>@Model.TotalEvents</strong>
+        <small>@Model.PublishedEvents published</small>
+    </div>
+    <div class="dashboard-stat">
+        <span>Tickets Sold</span>
+        <strong>@Model.TicketsSold</strong>
+        <small>Across organizer events</small>
+    </div>
+    <div class="dashboard-stat">
+        <span>Revenue</span>
+        <strong>$@Model.Revenue</strong>
+        <small>Total reservations</small>
+    </div>
+    <div class="dashboard-stat">
+        <span>In Review</span>
+        <strong>@Model.PendingEvents</strong>
+        <small>@Model.RejectedEvents rejected</small>
+    </div>
+
+    <div class="dashboard-panel organizer-wide-panel">
+        <div class="panel-title">
+            <h2>Top Events</h2>
+            <a asp-action="Index">Manage events</a>
+        </div>
+        <div class="admin-table-wrap">
+            <table class="admin-data-table">
+                <thead>
+                    <tr>
+                        <th>Event</th>
+                        <th>Status</th>
+                        <th>Tickets</th>
+                        <th>Revenue</th>
+                        <th>Capacity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in Model.TopEvents)
+                {
+                    <tr>
+                        <td><strong>@item.Title</strong><span>@item.EventDate.ToString("MMM dd, yyyy")</span></td>
+                        <td><span class="table-pill">@item.Status</span></td>
+                        <td>@item.TicketsSold</td>
+                        <td>$@item.Revenue</td>
+                        <td>@item.TicketsSold/@item.Capacity</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="dashboard-panel organizer-side-panel">
+        <div class="panel-title">
+            <h2>Review Queue</h2>
+            <span>Pending / rejected</span>
+        </div>
+        <div class="insight-list">
+            @if (!Model.ReviewQueue.Any())
+            {
+                <article>
+                    <div>
+                        <strong>No review items</strong>
+                        <span>Your events are clear.</span>
+                    </div>
+                </article>
+            }
+            @foreach (var item in Model.ReviewQueue)
+            {
+                <article>
+                    <div>
+                        <strong>@item.Title</strong>
+                        <span>@item.Status &bull; @item.EventDate.ToString("MMM dd, yyyy")</span>
+                    </div>
+                    @if (!string.IsNullOrWhiteSpace(item.AdminNote))
+                    {
+                        <span class="admin-note">@item.AdminNote</span>
+                    }
+                </article>
+            }
+        </div>
+    </div>
+</section>

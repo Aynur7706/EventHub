@@ -1,0 +1,110 @@
+@model EventHub.Web.ViewModels.UserProfileViewModel
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<section class="public-page-shell">
+    <div class="container">
+        <div class="public-page-title">
+            <div>
+                <span class="eyebrow">Account</span>
+                <h1>My Profile</h1>
+                <p>Your account details and reserved tickets are kept together here.</p>
+            </div>
+            <span class="page-count">@Model.Tickets.Sum(t => t.TicketCount) tickets</span>
+        </div>
+    </div>
+</section>
+
+<section class="container public-section">
+    @if (TempData["ProfileStatus"] is not null)
+    {
+        <div class="alert alert-info">@TempData["ProfileStatus"]</div>
+    }
+
+    <div class="profile-shell">
+        <aside class="profile-card">
+            <div class="profile-avatar">@((Model.FullName.Length > 0 ? Model.FullName : Model.Email).Substring(0, 1).ToUpper())</div>
+            <h2>@Model.FullName</h2>
+            <span>@Model.Email</span>
+            @if (!string.IsNullOrWhiteSpace(Model.PhoneNumber))
+            {
+                <span>@Model.PhoneNumber</span>
+            }
+            <dl>
+                <dt>Joined</dt>
+                <dd>@Model.CreatedAt.ToString("MMMM dd, yyyy")</dd>
+                <dt>Total tickets</dt>
+                <dd>@Model.Tickets.Sum(t => t.TicketCount)</dd>
+                <dt>Saved events</dt>
+                <dd>@Model.SavedEvents.Count</dd>
+            </dl>
+            <a class="btn btn-dark" asp-action="Edit">Edit Profile</a>
+        </aside>
+
+        <div class="profile-ticket-panel">
+            <div class="panel-title">
+                <h2>Reserved Tickets</h2>
+                <a asp-controller="Events" asp-action="Index">Explore more</a>
+            </div>
+
+            @if (!Model.Tickets.Any())
+            {
+                <div class="empty-ticket-state">
+                    <strong>No tickets yet</strong>
+                    <span>Reserve your first event ticket and it will appear here.</span>
+                </div>
+            }
+            else
+            {
+                <div class="profile-ticket-list">
+                    @foreach (var ticket in Model.Tickets)
+                    {
+                        <article>
+                            <div>
+                                <strong>@ticket.EventTitle</strong>
+                                <span>@ticket.Category &bull; @ticket.Location</span>
+                                <small>@ticket.EventDate.ToString("MMM dd, yyyy h:mm tt") &bull; @ticket.TicketCount ticket(s)</small>
+                            </div>
+                            <div class="profile-ticket-actions">
+                                <code>@ticket.TicketCode</code>
+                                <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.RegistrationId">View Ticket</a>
+                            </div>
+                        </article>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="profile-ticket-panel saved-events-panel">
+        <div class="panel-title">
+            <h2>Saved Events</h2>
+            <a asp-controller="Events" asp-action="Index">Browse events</a>
+        </div>
+        @if (!Model.SavedEvents.Any())
+        {
+            <div class="empty-ticket-state">
+                <strong>No saved events</strong>
+                <span>Save interesting events and they will appear here.</span>
+            </div>
+        }
+        else
+        {
+            <div class="saved-event-grid">
+                @foreach (var item in Model.SavedEvents)
+                {
+                    <article class="saved-event-card">
+                        <img src="@item.ImageUrl" alt="@item.Title" />
+                        <div>
+                            <strong>@item.Title</strong>
+                            <span>@item.Category &bull; @item.Location</span>
+                            <small>@item.EventDate.ToString("MMM dd, yyyy h:mm tt")</small>
+                            <a asp-controller="Events" asp-action="Details" asp-route-id="@item.EventId">View event</a>
+                        </div>
+                    </article>
+                }
+            </div>
+        }
+    </div>
+</section>

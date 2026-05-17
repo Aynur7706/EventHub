@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using EventHub.Web.Constants;
 using EventHub.Web.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -30,6 +31,7 @@ public class EventFormViewModel
     public int CategoryId { get; set; }
 
     public string? CurrentImageUrl { get; set; }
+    public string Status { get; set; } = EventStatuses.PendingReview;
     public IFormFile? Image { get; set; }
     public IReadOnlyList<SelectListItem> Categories { get; set; } = [];
 
@@ -43,6 +45,7 @@ public class EventFormViewModel
         EventDate = EventDate,
         CategoryId = CategoryId,
         OrganizerId = organizerId,
-        ImageUrl = imageUrl
+        ImageUrl = imageUrl,
+        Status = Status
     };
 }

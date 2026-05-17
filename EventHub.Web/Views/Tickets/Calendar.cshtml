@@ -48,7 +48,7 @@
                         <span>@day.Date.Day</span>
                         @foreach (var item in day.Events.Take(2))
                         {
-                            <a asp-controller="Events" asp-action="Details" asp-route-id="@item.EventId">@item.Title</a>
+                            <a asp-controller="Tickets" asp-action="Details" asp-route-id="@item.RegistrationId">@item.Title</a>
                         }
                         @if (day.Events.Count > 2)
                         {
@@ -85,8 +85,9 @@
                             </div>
                             <div>
                                 <h3>@item.Title</h3>
-                                <span>@item.Category • @item.Location</span>
-                                <small>@item.EventDate.ToString("h:mm tt") • @item.TicketCount ticket(s) • $@item.TotalPrice</small>
+                                <span>@item.Category &bull; @item.Location</span>
+                                <small>@item.EventDate.ToString("h:mm tt") &bull; @item.TicketCount ticket(s) &bull; $@item.TotalPrice</small>
+                                <a asp-controller="Tickets" asp-action="Details" asp-route-id="@item.RegistrationId">View ticket</a>
                             </div>
                         </article>
                     }

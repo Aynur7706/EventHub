@@ -44,6 +44,14 @@
                 <input class="form-control" id="ticketCount" name="ticketCount" type="number" min="1" max="@Model.AvailableTickets" value="1" />
                 <button class="btn btn-dark w-100 mt-3" type="submit">Reserve Ticket</button>
             </form>
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <form asp-action="@(Model.IsSaved ? "Unsave" : "Save")" asp-route-id="@Model.Event.Id" method="post" class="reservation-box save-event-box">
+                    <h2>@(Model.IsSaved ? "Saved Event" : "Save Event")</h2>
+                    <p>@(Model.IsSaved ? "This event is saved in your profile." : "Save this event and review it later from your profile.")</p>
+                    <button class="btn btn-dark w-100" type="submit">@(Model.IsSaved ? "Remove Saved Event" : "Save Event")</button>
+                </form>
+            }
         </div>
     </div>
 </section>

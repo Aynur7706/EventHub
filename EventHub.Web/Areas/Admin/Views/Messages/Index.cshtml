@@ -1,0 +1,52 @@
+@model IEnumerable<EventHub.Web.ViewModels.AdminContactMessageViewModel>
+@{
+    ViewData["Title"] = "Messages";
+    ViewData["Breadcrumb"] = "Dashboard / Messages";
+}
+
+<section class="dashboard-panel">
+    <div class="panel-title">
+        <h2>Contact Messages</h2>
+        <span>@Model.Count(m => m.Status != EventHub.Web.Constants.ContactMessageStatuses.Replied) open</span>
+    </div>
+    @if (TempData["MessageStatus"] is not null)
+    {
+        <div class="checkin-message warning">
+            <strong>Message status</strong>
+            <span>@TempData["MessageStatus"]</span>
+        </div>
+    }
+    <div class="message-grid">
+        @foreach (var item in Model)
+        {
+            <article class="message-card @(item.Status == EventHub.Web.Constants.ContactMessageStatuses.Replied ? "read" : "")">
+                <div>
+                    <strong>@item.FullName</strong>
+                    <span>@item.Email &bull; @item.CreatedAt.ToString("MMM dd, yyyy") &bull; @item.Status</span>
+                </div>
+                <p>@item.Message</p>
+                @if (!string.IsNullOrWhiteSpace(item.Reply))
+                {
+                    <div class="reply-box">
+                        <strong>Admin reply</strong>
+                        <p>@item.Reply</p>
+                        <span>@item.RepliedBy &bull; @item.RepliedAt?.ToString("MMM dd, yyyy h:mm tt")</span>
+                    </div>
+                }
+                <form asp-action="GenerateDraft" asp-route-id="@item.Id" method="post" class="message-ai-form">
+                    <button class="table-success-btn ai-draft-btn" type="submit">Generate AI Draft</button>
+                </form>
+                <form asp-action="Reply" asp-route-id="@item.Id" method="post" class="message-reply-form">
+                    <textarea name="reply" rows="3" placeholder="Write admin reply">@item.Reply</textarea>
+                    <button class="table-success-btn" type="submit">Save Reply</button>
+                </form>
+                @if (!item.IsRead)
+                {
+                    <form asp-action="MarkRead" asp-route-id="@item.Id" method="post">
+                        <button class="table-success-btn" type="submit">Mark read</button>
+                    </form>
+                }
+            </article>
+        }
+    </div>
+</section>

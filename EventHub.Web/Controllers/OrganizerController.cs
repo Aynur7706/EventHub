@@ -14,6 +14,50 @@ namespace EventHub.Web.Controllers;
 [Authorize(Roles = $"{AppRoles.Admin},{AppRoles.Organizer}")]
 public class OrganizerController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IImageStorageService imageStorage) : Controller
 {
+    public async Task<IActionResult> Dashboard()
+    {
+        var userId = userManager.GetUserId(User);
+        if (userId is null)
+        {
+            return Challenge();
+        }
+
+        var query = context.Events.Include(e => e.Registrations).AsQueryable();
+        if (!User.IsInRole(AppRoles.Admin))
+        {
+            query = query.Where(e => e.OrganizerId == userId);
+        }
+
+        var events = await query.AsNoTracking().ToListAsync();
+        var insights = events.Select(e => new OrganizerEventInsightViewModel
+        {
+            Id = e.Id,
+            Title = e.Title,
+            Status = e.Status,
+            EventDate = e.EventDate,
+            Capacity = e.Capacity,
+            TicketsSold = e.Registrations.Sum(r => r.TicketCount),
+            Revenue = e.Registrations.Sum(r => r.TotalPrice),
+            AdminNote = e.AdminNote
+        }).ToList();
+
+        return View(new OrganizerDashboardViewModel
+        {
+            TotalEvents = events.Count,
+            PublishedEvents = events.Count(e => e.Status == EventStatuses.Published),
+            PendingEvents = events.Count(e => e.Status == EventStatuses.PendingReview),
+            RejectedEvents = events.Count(e => e.Status == EventStatuses.Rejected),
+            TicketsSold = insights.Sum(e => e.TicketsSold),
+            Revenue = insights.Sum(e => e.Revenue),
+            TopEvents = insights.OrderByDescending(e => e.Revenue).ThenByDescending(e => e.TicketsSold).Take(5).ToList(),
+            ReviewQueue = insights
+                .Where(e => e.Status is EventStatuses.PendingReview or EventStatuses.Rejected)
+                .OrderByDescending(e => e.EventDate)
+                .Take(5)
+                .ToList()
+        });
+    }
+
     public async Task<IActionResult> Index()
     {
         var userId = userManager.GetUserId(User);
@@ -43,6 +87,7 @@ public class OrganizerController(ApplicationDbContext context, UserManager<Appli
             return Challenge();
         }
 
+        model.Status = User.IsInRole(AppRoles.Admin) ? EventStatuses.Published : EventStatuses.PendingReview;
         var imageUrl = await imageStorage.SaveAsync(model.Image, "/images/event-placeholder.svg");
         context.Events.Add(model.ToEntity(userId, imageUrl));
         await context.SaveChangesAsync();
@@ -67,7 +112,8 @@ public class OrganizerController(ApplicationDbContext context, UserManager<Appli
             Capacity = item.Capacity,
             EventDate = item.EventDate,
             CategoryId = item.CategoryId,
-            CurrentImageUrl = item.ImageUrl
+            CurrentImageUrl = item.ImageUrl,
+            Status = item.Status
         }));
     }
 
@@ -99,7 +145,79 @@ public class OrganizerController(ApplicationDbContext context, UserManager<Appli
         item.EventDate = model.EventDate;
         item.CategoryId = model.CategoryId;
         item.ImageUrl = await imageStorage.SaveAsync(model.Image, item.ImageUrl);
+        item.Status = User.IsInRole(AppRoles.Admin) ? item.Status : EventStatuses.PendingReview;
 
+        await context.SaveChangesAsync();
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize(Roles = AppRoles.Admin)]
+    public async Task<IActionResult> Publish(int id)
+    {
+        var item = await context.Events.FirstOrDefaultAsync(e => e.Id == id);
+        if (item is null)
+        {
+            return NotFound();
+        }
+
+        item.Status = EventStatuses.Published;
+        item.AdminNote = null;
+        context.AuditLogs.Add(new AuditLog
+        {
+            Action = "Event Published",
+            Details = item.Title,
+            Actor = User.Identity?.Name ?? "Admin"
+        });
+        await context.SaveChangesAsync();
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize(Roles = AppRoles.Admin)]
+    public async Task<IActionResult> Reject(int id, string? adminNote)
+    {
+        var item = await context.Events.FirstOrDefaultAsync(e => e.Id == id);
+        if (item is null)
+        {
+            return NotFound();
+        }
+
+        item.Status = EventStatuses.Rejected;
+        item.AdminNote = string.IsNullOrWhiteSpace(adminNote)
+            ? "Event was rejected by admin."
+            : adminNote.Trim();
+        context.AuditLogs.Add(new AuditLog
+        {
+            Action = "Event Rejected",
+            Details = item.Title,
+            Actor = User.Identity?.Name ?? "Admin"
+        });
+        await context.SaveChangesAsync();
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize(Roles = AppRoles.Admin)]
+    public async Task<IActionResult> MoveToDraft(int id)
+    {
+        var item = await context.Events.FirstOrDefaultAsync(e => e.Id == id);
+        if (item is null)
+        {
+            return NotFound();
+        }
+
+        item.Status = EventStatuses.Draft;
+        item.AdminNote = "Moved back to draft by admin.";
+        context.AuditLogs.Add(new AuditLog
+        {
+            Action = "Event Moved To Draft",
+            Details = item.Title,
+            Actor = User.Identity?.Name ?? "Admin"
+        });
         await context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
     }

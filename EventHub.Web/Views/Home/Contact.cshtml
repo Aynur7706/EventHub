@@ -1,3 +1,4 @@
+@model EventHub.Web.ViewModels.ContactMessageViewModel
 @{
     ViewData["Title"] = "Contact";
 }
@@ -15,6 +16,11 @@
 </section>
 
 <section class="container public-section">
+    @if (TempData["Status"] is not null)
+    {
+        <div class="alert alert-info">@TempData["Status"]</div>
+    }
+
     <div class="row g-4">
         <div class="col-lg-5">
             <div class="contact-card h-100">
@@ -29,25 +35,32 @@
             </div>
         </div>
         <div class="col-lg-7">
-            <form class="contact-form">
+            <form class="contact-form" asp-action="Contact" method="post">
                 <div class="row g-3">
                     <div class="col-md-6">
-                        <label class="form-label">Full name</label>
-                        <input class="form-control" placeholder="Your name" />
+                        <label class="form-label" asp-for="FullName">Full name</label>
+                        <input class="form-control" asp-for="FullName" placeholder="Your name" />
+                        <span class="text-danger" asp-validation-for="FullName"></span>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label">Email</label>
-                        <input class="form-control" placeholder="name@example.com" />
+                        <label class="form-label" asp-for="Email">Email</label>
+                        <input class="form-control" asp-for="Email" placeholder="name@example.com" />
+                        <span class="text-danger" asp-validation-for="Email"></span>
                     </div>
                     <div class="col-12">
-                        <label class="form-label">Message</label>
-                        <textarea class="form-control" rows="6" placeholder="Tell us about your event"></textarea>
+                        <label class="form-label" asp-for="Message">Message</label>
+                        <textarea class="form-control" asp-for="Message" rows="6" placeholder="Tell us about your event"></textarea>
+                        <span class="text-danger" asp-validation-for="Message"></span>
                     </div>
                     <div class="col-12">
-                        <button class="btn btn-dark px-4" type="button">Send message</button>
+                        <button class="btn btn-dark px-4" type="submit">Send message</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
 </section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

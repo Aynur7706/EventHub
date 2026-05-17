@@ -29,8 +29,59 @@ public class EventsController(IEventService eventService, ApplicationDbContext c
         {
             Event = item,
             AvailableTickets = await eventService.GetAvailableTicketsAsync(id),
-            IsRegistered = userId is not null && await context.Registrations.AnyAsync(r => r.EventId == id && r.UserId == userId)
+            IsRegistered = userId is not null && await context.Registrations.AnyAsync(r => r.EventId == id && r.UserId == userId),
+            IsSaved = userId is not null && await context.SavedEvents.AnyAsync(s => s.EventId == id && s.UserId == userId)
         });
+    }
+
+    [HttpPost]
+    [Authorize]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Save(int id)
+    {
+        var userId = userManager.GetUserId(User);
+        if (userId is null)
+        {
+            return Challenge();
+        }
+
+        var exists = await context.SavedEvents.AnyAsync(s => s.EventId == id && s.UserId == userId);
+        if (!exists)
+        {
+            context.SavedEvents.Add(new SavedEvent { EventId = id, UserId = userId });
+            context.AuditLogs.Add(new AuditLog
+            {
+                Action = "Event Saved",
+                Details = $"Event #{id}",
+                Actor = User.Identity?.Name ?? "User"
+            });
+            await context.SaveChangesAsync();
+            TempData["Status"] = "Event saved to your profile.";
+        }
+
+        return RedirectToAction(nameof(Details), new { id });
+    }
+
+    [HttpPost]
+    [Authorize]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Unsave(int id)
+    {
+        var userId = userManager.GetUserId(User);
+        if (userId is null)
+        {
+            return Challenge();
+        }
+
+        var saved = await context.SavedEvents.FirstOrDefaultAsync(s => s.EventId == id && s.UserId == userId);
+        if (saved is not null)
+        {
+            context.SavedEvents.Remove(saved);
+            await context.SaveChangesAsync();
+            TempData["Status"] = "Event removed from saved events.";
+        }
+
+        return RedirectToAction(nameof(Details), new { id });
     }
 
     [HttpPost]

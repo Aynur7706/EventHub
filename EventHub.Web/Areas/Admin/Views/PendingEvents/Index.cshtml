@@ -1,0 +1,64 @@
+@model IEnumerable<EventHub.Web.ViewModels.AdminPendingEventViewModel>
+@{
+    ViewData["Title"] = "Pending Events";
+    ViewData["Breadcrumb"] = "Dashboard / Pending Events";
+}
+
+<section class="dashboard-panel">
+    <div class="panel-title">
+        <h2>Event Review Queue</h2>
+        <span>@Model.Count(e => e.Status == EventHub.Web.Constants.EventStatuses.PendingReview) pending</span>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="empty-ticket-state">
+            <strong>No events waiting for review</strong>
+            <span>Organizer submissions will appear here automatically.</span>
+        </div>
+    }
+    else
+    {
+        <div class="pending-event-list">
+            @foreach (var item in Model)
+            {
+                var percent = item.Capacity == 0 ? 0 : Math.Min(100, item.TicketsSold * 100 / item.Capacity);
+                <article class="pending-event-card">
+                    <img src="@item.ImageUrl" alt="@item.Title" />
+                    <div class="pending-event-content">
+                        <div class="pending-event-heading">
+                            <div>
+                                <span class="eyebrow">@item.Category</span>
+                                <h2>@item.Title</h2>
+                                <p>@item.Description</p>
+                            </div>
+                            <span class="table-pill">@item.Status</span>
+                        </div>
+                        <div class="pending-event-meta">
+                            <span>@item.OrganizerName</span>
+                            <span>@item.OrganizerEmail</span>
+                            <span>@item.EventDate.ToString("MMM dd, yyyy h:mm tt")</span>
+                            <span>@item.Location</span>
+                            <span>@(item.Price == 0 ? "Free" : $"${item.Price}")</span>
+                        </div>
+                        @if (!string.IsNullOrWhiteSpace(item.AdminNote))
+                        {
+                            <span class="admin-note">@item.AdminNote</span>
+                        }
+                        <div class="progress-line"><i style="width:@percent%"></i></div>
+                        <div class="pending-event-actions">
+                            <form asp-area="" asp-controller="Organizer" asp-action="Publish" asp-route-id="@item.Id" method="post">
+                                <button class="table-success-btn" type="submit">Publish</button>
+                            </form>
+                            <form asp-area="" asp-controller="Organizer" asp-action="Reject" asp-route-id="@item.Id" method="post">
+                                <input name="adminNote" placeholder="Reject reason" />
+                                <button class="table-danger-btn" type="submit">Reject</button>
+                            </form>
+                            <a asp-area="" asp-controller="Organizer" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        </div>
+                    </div>
+                </article>
+            }
+        </div>
+    }
+</section>

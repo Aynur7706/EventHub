@@ -1,0 +1,40 @@
+@model IEnumerable<EventHub.Web.ViewModels.AdminUserViewModel>
+@{
+    ViewData["Title"] = "Users";
+    ViewData["Breadcrumb"] = "Dashboard / Users";
+}
+
+<section class="dashboard-panel">
+    <div class="panel-title">
+        <h2>User Management</h2>
+        <span>@Model.Count() accounts</span>
+    </div>
+    <div class="admin-table-wrap">
+        <table class="admin-data-table">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Role</th>
+                    <th>Tickets</th>
+                    <th>Events</th>
+                    <th>Joined</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <strong>@item.FullName</strong>
+                        <span>@item.Email</span>
+                    </td>
+                    <td><span class="table-pill">@item.Roles</span></td>
+                    <td>@item.Tickets</td>
+                    <td>@item.OrganizedEvents</td>
+                    <td>@item.CreatedAt.ToString("MMM dd, yyyy")</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</section>

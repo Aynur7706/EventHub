@@ -1,0 +1,53 @@
+@model IEnumerable<EventHub.Web.ViewModels.AdminRegistrationViewModel>
+@{
+    ViewData["Title"] = "Tickets";
+    ViewData["Breadcrumb"] = "Dashboard / Tickets";
+}
+
+<section class="dashboard-panel">
+    <div class="panel-title">
+        <h2>Ticket Reservations</h2>
+        <div class="panel-actions">
+            <a asp-action="CheckIn">Open Check In</a>
+            <a asp-action="ExportCsv">Export CSV</a>
+        </div>
+    </div>
+    <div class="admin-table-wrap">
+        <table class="admin-data-table">
+            <thead>
+                <tr>
+                    <th>Customer</th>
+                    <th>Event</th>
+                    <th>Event Date</th>
+                    <th>Ticket Code</th>
+                    <th>Status</th>
+                    <th>Tickets</th>
+                    <th>Total</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <strong>@item.CustomerName</strong>
+                        <span>@item.CustomerEmail</span>
+                    </td>
+                    <td>@item.EventTitle</td>
+                    <td>@item.EventDate.ToString("MMM dd, yyyy")</td>
+                    <td><code>@item.TicketCode</code></td>
+                    <td><span class="table-pill">@item.Status</span></td>
+                    <td>@item.TicketCount</td>
+                    <td>$@item.TotalPrice</td>
+                    <td>
+                        <form asp-action="Delete" asp-route-id="@item.Id" method="post">
+                            <button class="table-danger-btn" type="submit" @(item.Status == EventHub.Web.Constants.RegistrationStatuses.Cancelled ? "disabled" : "")>Cancel</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</section>

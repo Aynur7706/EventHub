@@ -24,6 +24,8 @@
                         @if (User.Identity?.IsAuthenticated == true)
                         {
                             <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Tickets" asp-action="Calendar">My Tickets</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Profile" asp-action="Index">My Profile</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="OrganizerRequests" asp-action="Create">Become Organizer</a></li>
                         }
                         <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
                         @if (User.IsInRole("Admin"))

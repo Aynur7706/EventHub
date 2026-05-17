@@ -11,4 +11,5 @@ public record EventDto(
     string ImageUrl,
     string CategoryName,
     string OrganizerName,
-    int RegisteredTickets);
+    int RegisteredTickets,
+    string Status);

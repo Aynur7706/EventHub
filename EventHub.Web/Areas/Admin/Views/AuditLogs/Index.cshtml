@@ -1,0 +1,35 @@
+@model IEnumerable<EventHub.Web.ViewModels.AuditLogViewModel>
+@{
+    ViewData["Title"] = "Audit Logs";
+    ViewData["Breadcrumb"] = "Dashboard / Audit Logs";
+}
+
+<section class="dashboard-panel">
+    <div class="panel-title">
+        <h2>Recent Activity</h2>
+        <span>@Model.Count() records</span>
+    </div>
+    <div class="admin-table-wrap">
+        <table class="admin-data-table">
+            <thead>
+                <tr>
+                    <th>Action</th>
+                    <th>Details</th>
+                    <th>Actor</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td><strong>@item.Action</strong></td>
+                    <td>@item.Details</td>
+                    <td>@item.Actor</td>
+                    <td>@item.CreatedAt.ToString("MMM dd, yyyy h:mm tt")</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</section>

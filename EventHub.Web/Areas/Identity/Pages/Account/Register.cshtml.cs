@@ -1,9 +1,11 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text;
 using EventHub.Web.Constants;
 using EventHub.Web.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace EventHub.Web.Areas.Identity.Pages.Account;
 
@@ -14,6 +16,8 @@ public class RegisterModel(UserManager<ApplicationUser> userManager, SignInManag
 
     [BindProperty(SupportsGet = true)]
     public string? ReturnUrl { get; set; }
+
+    public string? ConfirmationLink { get; set; }
 
     public void OnGet()
     {
@@ -49,7 +53,20 @@ public class RegisterModel(UserManager<ApplicationUser> userManager, SignInManag
         }
 
         await userManager.AddToRoleAsync(user, AppRoles.User);
+        var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
+        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+        ConfirmationLink = Url.Page(
+            "/Account/ConfirmEmail",
+            pageHandler: null,
+            values: new { area = "Identity", userId = user.Id, code },
+            protocol: Request.Scheme);
+
         await signInManager.SignInAsync(user, isPersistent: false);
+        if (Input.ShowConfirmationLink)
+        {
+            return Page();
+        }
+
         return LocalRedirect(ReturnUrl);
     }
 
@@ -67,5 +84,7 @@ public class RegisterModel(UserManager<ApplicationUser> userManager, SignInManag
         [Required, DataType(DataType.Password), Display(Name = "Confirm password")]
         [Compare(nameof(Password), ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; } = string.Empty;
+
+        public bool ShowConfirmationLink { get; set; } = true;
     }
 }

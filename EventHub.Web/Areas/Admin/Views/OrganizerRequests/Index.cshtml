@@ -1,0 +1,57 @@
+@model IEnumerable<EventHub.Web.ViewModels.AdminOrganizerRequestViewModel>
+@{
+    ViewData["Title"] = "Organizer Requests";
+    ViewData["Breadcrumb"] = "Dashboard / Organizer Requests";
+}
+
+<section class="dashboard-panel">
+    <div class="panel-title">
+        <h2>Organizer Requests</h2>
+        <span>@Model.Count() requests</span>
+    </div>
+    <div class="admin-table-wrap">
+        <table class="admin-data-table">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Organization</th>
+                    <th>Reason</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <strong>@item.FullName</strong>
+                        <span>@item.Email</span>
+                    </td>
+                    <td>@item.OrganizationName</td>
+                    <td>@item.Reason</td>
+                    <td><span class="table-pill">@item.Status</span></td>
+                    <td>
+                        @if (item.Status == EventHub.Web.Constants.OrganizerRequestStatuses.Pending)
+                        {
+                            <div class="table-action-stack">
+                                <form asp-action="Approve" asp-route-id="@item.Id" method="post">
+                                    <button class="table-success-btn" type="submit">Approve</button>
+                                </form>
+                                <form asp-action="Reject" asp-route-id="@item.Id" method="post">
+                                    <input class="form-control form-control-sm" name="adminNote" placeholder="Reject note" />
+                                    <button class="table-danger-btn" type="submit">Reject</button>
+                                </form>
+                            </div>
+                        }
+                        else
+                        {
+                            <span>@(item.AdminNote ?? "Reviewed")</span>
+                        }
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</section>

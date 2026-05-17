@@ -1,0 +1,50 @@
+@model EventHub.Web.ViewModels.OrganizerRequestViewModel
+@{
+    ViewData["Title"] = "Become Organizer";
+    var existing = ViewBag.ExistingRequest as EventHub.Web.Models.OrganizerRequest;
+}
+
+<section class="public-page-shell">
+    <div class="container">
+        <div class="public-page-title">
+            <div>
+                <span class="eyebrow">Organizer</span>
+                <h1>Become an Organizer</h1>
+                <p>Send a request to publish and manage your own events on EventHub.</p>
+            </div>
+            @if (existing is not null)
+            {
+                <span class="page-count">@existing.Status</span>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="container public-section">
+    @if (TempData["Status"] is not null)
+    {
+        <div class="alert alert-info">@TempData["Status"]</div>
+    }
+
+    <form class="contact-form" asp-action="Create" method="post">
+        <div class="row g-3">
+            <div class="col-12">
+                <label class="form-label" asp-for="OrganizationName">Organization name</label>
+                <input class="form-control" asp-for="OrganizationName" placeholder="Your team, company or community" />
+                <span class="text-danger" asp-validation-for="OrganizationName"></span>
+            </div>
+            <div class="col-12">
+                <label class="form-label" asp-for="Reason">Why do you want organizer access?</label>
+                <textarea class="form-control" asp-for="Reason" rows="6" placeholder="Tell admin what kind of events you will publish"></textarea>
+                <span class="text-danger" asp-validation-for="Reason"></span>
+            </div>
+            <div class="col-12">
+                <button class="btn btn-dark px-4" type="submit">Send Request</button>
+            </div>
+        </div>
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

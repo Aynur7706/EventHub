@@ -9,4 +9,5 @@ public class ApplicationUser : IdentityUser
 
     public ICollection<Event> OrganizedEvents { get; set; } = new List<Event>();
     public ICollection<Registration> Registrations { get; set; } = new List<Registration>();
+    public ICollection<SavedEvent> SavedEvents { get; set; } = new List<SavedEvent>();
 }

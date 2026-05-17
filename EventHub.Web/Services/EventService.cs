@@ -1,3 +1,4 @@
+using EventHub.Web.Constants;
 using EventHub.Web.DTOs;
 using EventHub.Web.Interfaces;
 using EventHub.Web.Models;
@@ -15,6 +16,7 @@ public class EventService(IUnitOfWork unitOfWork) : IEventService
             .Include(e => e.Organizer)
             .Include(e => e.Registrations)
             .Where(e => e.EventDate >= DateTime.Today)
+            .Where(e => e.Status == EventStatuses.Published)
             .AsNoTracking();
 
         if (!string.IsNullOrWhiteSpace(filter.Search))
@@ -67,7 +69,7 @@ public class EventService(IUnitOfWork unitOfWork) : IEventService
             .Include(e => e.Organizer)
             .Include(e => e.Registrations)
             .AsNoTracking()
-            .FirstOrDefaultAsync(e => e.Id == id);
+            .FirstOrDefaultAsync(e => e.Id == id && e.Status == EventStatuses.Published);
 
         return item is null ? null : ToDto(item);
     }
@@ -93,7 +95,10 @@ public class EventService(IUnitOfWork unitOfWork) : IEventService
             .Include(e => e.Registrations)
             .FirstOrDefaultAsync(e => e.Id == eventId);
 
-        if (item is null || item.EventDate < DateTime.UtcNow || item.Registrations.Sum(r => r.TicketCount) + ticketCount > item.Capacity)
+        if (item is null ||
+            item.Status != EventStatuses.Published ||
+            item.EventDate < DateTime.UtcNow ||
+            item.Registrations.Sum(r => r.TicketCount) + ticketCount > item.Capacity)
         {
             return false;
         }
@@ -111,7 +116,9 @@ public class EventService(IUnitOfWork unitOfWork) : IEventService
                 EventId = eventId,
                 UserId = userId,
                 TicketCount = ticketCount,
-                TotalPrice = item.Price * ticketCount
+                TotalPrice = item.Price * ticketCount,
+                TicketCode = GenerateTicketCode(),
+                Status = RegistrationStatuses.Reserved
             });
         }
 
@@ -130,5 +137,8 @@ public class EventService(IUnitOfWork unitOfWork) : IEventService
         item.ImageUrl,
         item.Category?.Name ?? "Uncategorized",
         item.Organizer?.FullName ?? item.Organizer?.Email ?? "Organizer",
-        item.Registrations.Sum(r => r.TicketCount));
+        item.Registrations.Sum(r => r.TicketCount),
+        item.Status);
+
+    private static string GenerateTicketCode() => $"EH-{DateTime.UtcNow:yyyyMMdd}-{Guid.NewGuid():N}"[..20].ToUpperInvariant();
 }

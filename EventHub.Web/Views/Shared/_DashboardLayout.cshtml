@@ -22,10 +22,18 @@
                 {
                     <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
                     <a asp-area="" asp-controller="Organizer" asp-action="Index">Events</a>
+                    <a asp-area="Admin" asp-controller="PendingEvents" asp-action="Index">Pending Events</a>
+                    <a asp-area="Admin" asp-controller="Registrations" asp-action="Index">Tickets</a>
+                    <a asp-area="Admin" asp-controller="Registrations" asp-action="CheckIn">Check In</a>
+                    <a asp-area="Admin" asp-controller="Users" asp-action="Index">Users</a>
+                    <a asp-area="Admin" asp-controller="OrganizerRequests" asp-action="Index">Organizer Requests</a>
+                    <a asp-area="Admin" asp-controller="Messages" asp-action="Index">Messages</a>
+                    <a asp-area="Admin" asp-controller="AuditLogs" asp-action="Index">Audit Logs</a>
                     <a asp-area="Admin" asp-controller="Categories" asp-action="Index">Categories</a>
                 }
                 else
                 {
+                    <a asp-area="" asp-controller="Organizer" asp-action="Dashboard">Dashboard</a>
                     <a asp-area="" asp-controller="Organizer" asp-action="Index">Events</a>
                     <a asp-area="" asp-controller="Organizer" asp-action="Create">Create Event</a>
                 }

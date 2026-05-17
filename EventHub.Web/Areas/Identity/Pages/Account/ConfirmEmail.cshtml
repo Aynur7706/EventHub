@@ -1,0 +1,18 @@
+@page
+@model EventHub.Web.Areas.Identity.Pages.Account.ConfirmEmailModel
+@{
+    ViewData["Title"] = "Confirm Email";
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<section class="auth-section auth-polished">
+    <div class="auth-card auth-polished-card mx-auto" style="max-width: 640px;">
+        <span class="eyebrow">Account verification</span>
+        <h1 class="h2 fw-bold mt-2">Confirm Email</h1>
+        <div class="checkin-message success">
+            <strong>Status</strong>
+            <span>@Model.StatusMessage</span>
+        </div>
+        <a class="btn btn-dark mt-3" asp-area="Identity" asp-page="/Account/Login">Go to login</a>
+    </div>
+</section>

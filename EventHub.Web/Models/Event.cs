@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using EventHub.Web.Constants;
 
 namespace EventHub.Web.Models;
 
@@ -27,6 +28,12 @@ public class Event
 
     [StringLength(600)]
     public string ImageUrl { get; set; } = "/images/event-placeholder.svg";
+
+    [StringLength(40)]
+    public string Status { get; set; } = EventStatuses.Published;
+
+    [StringLength(700)]
+    public string? AdminNote { get; set; }
 
     public int CategoryId { get; set; }
     public Category? Category { get; set; }

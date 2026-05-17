@@ -16,10 +16,12 @@ public class TicketCalendarDay
 }
 
 public record TicketCalendarEvent(
+    int RegistrationId,
     int EventId,
     string Title,
     string Category,
     string Location,
     DateTime EventDate,
     int TicketCount,
-    decimal TotalPrice);
+    decimal TotalPrice,
+    string TicketCode);
